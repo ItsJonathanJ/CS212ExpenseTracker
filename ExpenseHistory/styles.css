@@ -1,0 +1,23 @@
+.expense-card {
+  border: 1px solid #e5e7eb;
+  border-left: 4px solid #ff0000;
+  border-radius: 12px;
+  background-color: #fff;
+}
+
+.expense-card .card-body { padding: 1.25rem; }
+
+.expense-card .card-title {
+  color: #263238;
+  overflow-wrap: anywhere;
+}
+
+.expense-card .badge {
+  font-weight: 500;
+  padding: 0.4rem 0.75rem;
+}
+
+.expense-card .expense-amount {
+  color: #198754;
+  font-variant-numeric: tabular-nums;
+}
