@@ -1,4 +1,5 @@
 import { loadExpenses, saveExpenses } from "./storage.js";
+import { getCurrentUser } from "./auth.js";
 
 export class Expense {
     constructor(description, amount, date, category) {
@@ -22,7 +23,17 @@ export class Expense {
  */
 class ExpenseManager {
     constructor() {
-        this.expenses = loadExpenses().map(expense =>
+        const user = getCurrentUser();
+        if (!user) {
+            window.location.replace("../");
+            this.userId = null;
+            this.expenses = [];
+            this.deletedExpenses = [];
+            return;
+        }
+
+        this.userId = user.id;
+        this.expenses = loadExpenses(this.userId).map(expense =>
             new Expense(expense.description, expense.amount, expense.date, expense.category)
         );
         this.deletedExpenses = []; // Store deleted expenses
@@ -30,12 +41,12 @@ class ExpenseManager {
 
     addExpense(expense) {
         this.expenses.push(expense);
-        saveExpenses(this.expenses);
+        saveExpenses(this.userId, this.expenses);
     }
     // Definitely a better way to do it than passing the whole object
     removeExpense(expense) {
         this.expenses = this.expenses.filter(item => item !== expense);
-        saveExpenses(this.expenses);
+        saveExpenses(this.userId, this.expenses);
         this.deletedExpenses.push(expense); // Store the deleted expense
     }
 

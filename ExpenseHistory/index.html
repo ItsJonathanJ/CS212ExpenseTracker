@@ -12,7 +12,13 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="my-4">Expense History</h1>
+        <div class="d-flex justify-content-between align-items-center my-4">
+            <h1 class="mb-0">Expense History</h1>
+            <div>
+                <a class="btn btn-outline-primary btn-sm" href="../InputForm/">Expenses</a>
+                <button type="button" id="logout-button" class="btn btn-outline-secondary btn-sm">Log Out</button>
+            </div>
+        </div>
         <div id="expense-history-list" class="list-group">
             <!-- Expense history items will be dynamically added here -->
         </div>

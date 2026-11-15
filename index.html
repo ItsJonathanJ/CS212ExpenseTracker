@@ -108,11 +108,13 @@
         <p id="message"></p>
 
         <p class="notice">
-            This is just a demo and doesn't save account information.
+            Class project only. This saves account details in this browser, so do not use a real password.
         </p>
     </main>
 
-    <script>
+    <script type="module">
+        import { createAccount, getCurrentUser, logIn } from "./auth.js";
+
         const form = document.querySelector("#account-form");
         const nameField = document.querySelector("#name-field");
         const nameInput = document.querySelector("#name");
@@ -122,6 +124,10 @@
         const message = document.querySelector("#message");
 
         let isCreatingAccount = false;
+
+        if (getCurrentUser()) {
+            window.location.href = "InputForm/";
+        }
 
         // Change between login and creating an account
         switchButton.addEventListener("click", function() {
@@ -150,9 +156,26 @@
         form.addEventListener("submit", function(event) {
             event.preventDefault();
 
-            message.textContent = "Opening expense tracker...";
+            message.textContent = "";
 
-            window.location.href = "InputForm/";
+            try {
+                if (isCreatingAccount) {
+                    createAccount(
+                        nameInput.value,
+                        document.querySelector("#email").value,
+                        document.querySelector("#password").value
+                    );
+                } else {
+                    logIn(
+                        document.querySelector("#email").value,
+                        document.querySelector("#password").value
+                    );
+                }
+
+                window.location.href = "InputForm/";
+            } catch (error) {
+                message.textContent = error.message;
+            }
         });
     </script>
 </body>

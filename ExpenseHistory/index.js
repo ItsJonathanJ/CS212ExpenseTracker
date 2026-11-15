@@ -1,6 +1,12 @@
 import { Expense, expenseManager } from "../expense.js";
+import { logOut } from "../auth.js";
 const currency = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
 const dates = new Intl.DateTimeFormat("en-US", { dateStyle: "long" });
+
+$("#logout-button").on("click", function () {
+    logOut();
+    window.location.href = "../";
+});
 
 function renderExpenses() {
     const expenseList = $('#expense-history-list');
