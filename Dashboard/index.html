@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spending Summary</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="index.js" type="module"></script>
+</head>
+<body>
+    <main class="container py-4">
+        <header class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+            <div>
+                <p class="mb-1">Expense Tracker</p>
+                <h1 class="mb-0">Spending Summary</h1>
+            </div>
+            <div class="d-flex flex-wrap align-items-center gap-2">
+                <span id="welcome-message" class="text-secondary me-2"></span>
+                <a class="btn btn-outline-primary btn-sm" href="../InputForm/">Expenses</a>
+                <a class="btn btn-outline-primary btn-sm" href="../ExpenseHistory/">History</a>
+                <button type="button" id="logout-button" class="btn btn-outline-secondary btn-sm">Log Out</button>
+            </div>
+        </header>
+
+        <section>
+            <h2 class="mb-3">Your spending</h2>
+            <div class="summary-grid mb-4">
+                <article class="summary-card">
+                    <span class="summary-label">This week</span>
+                    <strong id="week-total">$0.00</strong>
+                    <span class="summary-note">Monday to today</span>
+                </article>
+                <article class="summary-card">
+                    <span class="summary-label">This month</span>
+                    <strong id="month-total">$0.00</strong>
+                    <span class="summary-note">Since the start of the month</span>
+                </article>
+                <article class="summary-card">
+                    <span class="summary-label">This year</span>
+                    <strong id="year-total">$0.00</strong>
+                    <span class="summary-note">From January 1</span>
+                </article>
+                <article class="summary-card total-card">
+                    <span class="summary-label">Total spent</span>
+                    <strong id="all-time-total">$0.00</strong>
+                    <span class="summary-note">All expenses</span>
+                </article>
+            </div>
+        </section>
+
+        <section class="category-section card">
+            <div class="card-body">
+                <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+                    <div>
+                        <h2 class="mb-1">Spending by category</h2>
+                        <p id="category-period" class="text-secondary mb-0">All saved expenses</p>
+                    </div>
+                    <div class="quick-filters">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-range="week" aria-pressed="false">This week</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-range="month" aria-pressed="false">This month</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-range="year" aria-pressed="false">This year</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary active" data-range="all" aria-pressed="true">All time</button>
+                    </div>
+                </div>
+                <p id="category-total" class="category-total">$0.00</p>
+                <div id="category-list" class="category-list"></div>
+                <p id="empty-message" class="text-secondary mb-0" hidden>No expenses for this time period yet.</p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

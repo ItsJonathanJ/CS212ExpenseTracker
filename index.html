@@ -126,7 +126,7 @@
         let isCreatingAccount = false;
 
         if (getCurrentUser()) {
-            window.location.href = "InputForm/";
+            window.location.href = "Dashboard/";
         }
 
         // Change between login and creating an account
@@ -172,7 +172,7 @@
                     );
                 }
 
-                window.location.href = "InputForm/";
+                window.location.href = "Dashboard/";
             } catch (error) {
                 message.textContent = error.message;
             }
