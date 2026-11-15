@@ -1,10 +1,39 @@
 import { loadExpenses, saveExpenses } from "./storage.js";
 import { getCurrentUser } from "./auth.js";
 
+const EXPENSE_CATEGORIES = [
+    "food",
+    "transportation",
+    "entertainment",
+    "utilities",
+    "other"
+];
+
+function isValidDate(date) {
+    const parsedDate = new Date(date);
+    return !isNaN(parsedDate.getTime());
+}
+
 export class Expense {
     constructor(description, amount, date, category) {
+        if (!description || description.trim() === "") {
+            throw new Error("Please enter a description.");
+        }
+
+        if (isNaN(amount) || amount <= 0) {
+            throw new Error("Please enter a valid amount.");
+        }
+
+        if (!isValidDate(date)) {
+            throw new Error("Please enter a valid date.");
+        }
+
+        if (!EXPENSE_CATEGORIES.includes(category)) {
+            throw new Error("Please select a valid category.");
+        }
+
         this.description = description;
-        this.amount = amount;
+        this.amount = Number(amount);
         this.date = date;
         this.category = category;
     }
