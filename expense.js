@@ -1,3 +1,5 @@
+import { loadExpenses, saveExpenses } from "./storage.js";
+
 export class Expense {
     constructor(description, amount, date, category) {
         this.description = description;
@@ -20,19 +22,20 @@ export class Expense {
  */
 class ExpenseManager {
     constructor() {
-        this.expenses = [];
+        this.expenses = loadExpenses().map(expense =>
+            new Expense(expense.description, expense.amount, expense.date, expense.category)
+        );
         this.deletedExpenses = []; // Store deleted expenses
-        // Load expenses from database
     }
 
     addExpense(expense) {
         this.expenses.push(expense);
-        //Database logic here
+        saveExpenses(this.expenses);
     }
     // Definitely a better way to do it than passing the whole object
     removeExpense(expense) {
         this.expenses = this.expenses.filter(item => item !== expense);
-        //Database logic here
+        saveExpenses(this.expenses);
         this.deletedExpenses.push(expense); // Store the deleted expense
     }
 
@@ -62,25 +65,3 @@ class ExpenseManager {
  * Use import { expenseManager } from './expense.js' to access this instance in other modules
  */
 export const expenseManager = new ExpenseManager();
-
-
-// Add some sample expenses for testing
-expenseManager.addExpense(new Expense("Groceries", 150.00, "2026-06-01", "food"));
-expenseManager.addExpense(new Expense("Bus Pass", 50.00, "2026-06-02", "transportation"));
-expenseManager.addExpense(new Expense("Movie Tickets", 30.00, "2026-06-03", "entertainment"));
-expenseManager.addExpense(new Expense("Electricity Bill", 100.00, "2026-06-04", "utilities"));
-expenseManager.addExpense(new Expense("Gym Membership", 60.00, "2026-06-05", "other"));
-
-// Remove to test history page
-expenseManager.getAllExpenses().forEach(expense => {
-    expenseManager.removeExpense(expense);
-});
-
-// Add them back to test normal functionality
-expenseManager.addExpense(new Expense("Groceries", 150.00, "2026-06-01", "food"));
-expenseManager.addExpense(new Expense("Bus Pass", 50.00, "2026-06-02", "transportation"));
-expenseManager.addExpense(new Expense("Movie Tickets", 30.00, "2026-06-03", "entertainment"));
-expenseManager.addExpense(new Expense("Electricity Bill", 100.00, "2026-06-04", "utilities"));
-expenseManager.addExpense(new Expense("Gym Membership", 60.00, "2026-06-05", "other"));
-
-

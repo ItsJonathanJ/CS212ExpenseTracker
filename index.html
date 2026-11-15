@@ -1,13 +1,159 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Expense Tracker - Log In</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-card {
+            background-color: white;
+            width: 320px;
+            padding: 28px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            margin-top: 14px;
+        }
+
+        input {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 14px;
+            border: 0;
+            border-radius: 5px;
+            background-color: #198754;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #146c43;
+        }
+
+        .switch-button {
+            background-color: #6c757d;
+        }
+
+        .switch-button:hover {
+            background-color: #565e64;
+        }
+
+        .notice {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        #message {
+            color: #b02a37;
+        }
+
+        .hide {
+            display: none;
+        }
+    </style>
 </head>
+
 <body>
-    <p>Hello, World!</p>
+    <main class="login-card">
+        <h1 id="page-title">Log In</h1>
+
+        <form id="account-form">
+            <div id="name-field" class="hide">
+                <label for="name">Name</label>
+                <input type="text" id="name">
+            </div>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" required>
+
+            <button type="submit" id="submit-button">Log In</button>
+        </form>
+
+        <button type="button" class="switch-button" id="switch-button">
+            Create Account
+        </button>
+
+        <p id="message"></p>
+
+        <p class="notice">
+            This is just a demo and doesn't save account information.
+        </p>
+    </main>
+
+    <script>
+        const form = document.querySelector("#account-form");
+        const nameField = document.querySelector("#name-field");
+        const nameInput = document.querySelector("#name");
+        const title = document.querySelector("#page-title");
+        const submitButton = document.querySelector("#submit-button");
+        const switchButton = document.querySelector("#switch-button");
+        const message = document.querySelector("#message");
+
+        let isCreatingAccount = false;
+
+        // Change between login and creating an account
+        switchButton.addEventListener("click", function() {
+            isCreatingAccount = !isCreatingAccount;
+
+            if (isCreatingAccount) {
+                nameField.classList.remove("hide");
+                nameInput.required = true;
+
+                title.textContent = "Create Account";
+                submitButton.textContent = "Create Account";
+                switchButton.textContent = "Back to Log In";
+            } else {
+                nameField.classList.add("hide");
+                nameInput.required = false;
+
+                title.textContent = "Log In";
+                submitButton.textContent = "Log In";
+                switchButton.textContent = "Create Account";
+            }
+
+            message.textContent = "";
+        });
+
+        // Submit the form
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            message.textContent = "Opening expense tracker...";
+
+            window.location.href = "InputForm/";
+        });
+    </script>
 </body>
-<script src="index.js"></script>
 </html>
