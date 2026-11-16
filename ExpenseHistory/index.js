@@ -3,7 +3,8 @@
 //   1. a card for every expense you have now
 //   2. an activity log of every expense that was created, edited or deleted
 
-import { expenseManager } from "../expense.js";
+import { Expense, expenseManager } from "../expense.js";
+import { logOut } from "../auth.js";
 
 // These turn numbers and dates into nice text, like $54.75 and November 14, 2026.
 const currency = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
@@ -32,6 +33,11 @@ function escapeHtml(value) {
 function capitalize(text) {
     return text.charAt(0).toUpperCase() + text.slice(1);
 }
+
+$("#logout-button").on("click", function () {
+    logOut();
+    window.location.href = "../";
+});
 
 // "2026-11-14" -> "November 14, 2026"
 // T12:00:00 (noon) stops the date from shifting to the day before in some time zones.

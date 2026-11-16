@@ -2,29 +2,56 @@
 // This file is the "database" for the whole app. Every page imports it, so every
 // page works with the same list of expenses.
 //
-// Where the data lives: the browser's localStorage. localStorage keeps text
-// (strings) that survives page reloads, so we turn our data into JSON text
-// when saving, and turn the JSON text back into objects when loading.
+// Where the data lives: the browser's localStorage, saved as JSON text.
+// Each user gets their own save slot, so accounts never see each other's expenses.
 
-// The name (key) we save everything under in localStorage.
-const STORAGE_KEY = "expenseTracker.v1";
+import { getCurrentUser } from "./auth.js";
 
-/* ------------------------------------------------------------------
- * The Expense class: one Expense object = one expense (one card).
- * ------------------------------------------------------------------ */
+// The start of the key we save under. The user's id is added to the end of it.
+const STORAGE_KEY_PREFIX = "expenseTracker.v1.";
+
+const EXPENSE_CATEGORIES = [
+    "food",
+    "transportation",
+    "entertainment",
+    "utilities",
+    "other"
+];
+
+function isValidDate(date) {
+    const parsedDate = new Date(date);
+    return !isNaN(parsedDate.getTime());
+}
+
 export class Expense {
-    // id is optional. When you write new Expense("Lunch", 8, "2026-11-15", "food")
-    // a new unique id is made for you. When we load a saved expense, we pass its
-    // old id in so it keeps the same id.
+    // id is optional. A new unique id is made when you leave it out. When we load
+    // a saved expense, we pass its old id in so it keeps the same id.
     constructor(description, amount, date, category, id) {
+        if (!description || description.trim() === "") {
+            throw new Error("Please enter a description.");
+        }
+
+        if (isNaN(amount) || amount <= 0) {
+            throw new Error("Please enter a valid amount.");
+        }
+
+        if (!isValidDate(date)) {
+            throw new Error("Please enter a valid date.");
+        }
+
+        if (!EXPENSE_CATEGORIES.includes(category)) {
+            throw new Error("Please select a valid category.");
+        }
+
         if (id) {
             this.id = id;
         } else {
             // Unique id made from the current time plus a random piece
             this.id = "exp-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8);
         }
+
         this.description = description;
-        this.amount = amount;
+        this.amount = Number(amount);
         this.date = date;
         this.category = category;
     }
@@ -75,19 +102,33 @@ function toExpense(data) {
  */
 class ExpenseManager {
     constructor() {
+ const user = getCurrentUser();
+        if (!user) {
+            window.location.replace("../");
+        }
+
+        this.userId = user ? user.id : null;
         this.expenses = [];          // expenses you have now
         this.deletedExpenses = [];   // expenses that were deleted
-        this.history = [];           // log of created / edited / deleted
-        this.load();                 // fill the lists from localStorage (if anything was saved)
+        this.history = [];           // log of created, edited or deleted
+        this.load();                 // fill the lists from localStorage
     }
 
     /* ---------- saving and loading ---------- */
 
+    // The save slot for the current user.
+    storageKey() {
+        return STORAGE_KEY_PREFIX + this.userId;
+    }
+
     // Read the saved data from localStorage into the three lists.
     load() {
+        if (!this.userId) {
+            return; // nobody is logged in, so there is nothing to load
+        }
         let text = null;
         try {
-            text = localStorage.getItem(STORAGE_KEY);
+            text = localStorage.getItem(this.storageKey());
         } catch (error) {
             return; // localStorage is not available, so just start empty
         }
@@ -100,20 +141,23 @@ class ExpenseManager {
             this.deletedExpenses = (data.deletedExpenses || []).map(toExpense);
             this.history = data.history || [];
         } catch (error) {
-            // The saved text was damaged. Show a message and start empty instead of crashing.
+            // The saved text was damaged. Log it and start empty instead of crashing.
             console.error("Could not read saved expenses, starting empty.", error);
         }
     }
 
     // Write the three lists to localStorage. Called after every change.
     save() {
+        if (!this.userId) {
+            return;
+        }
         const data = {
             expenses: this.expenses.map(toPlainObject),
             deletedExpenses: this.deletedExpenses.map(toPlainObject),
             history: this.history
         };
         try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            localStorage.setItem(this.storageKey(), JSON.stringify(data));
         } catch (error) {
             console.error("Could not save expenses.", error);
         }
