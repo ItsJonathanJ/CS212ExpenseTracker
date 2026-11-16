@@ -6,6 +6,8 @@ const currency = new Intl.NumberFormat("en-US", {
     currency: "USD"
 });
 
+const dateFormat = new Intl.DateTimeFormat("en-US", { dateStyle: "long" });
+
 const categories = [
     "food",
     "transportation",
@@ -13,6 +15,10 @@ const categories = [
     "utilities",
     "other"
 ];
+
+function capitalize(text) {
+    return text.charAt(0).toUpperCase() + text.slice(1);
+}
 
 function startPage() {
     const currentUser = getCurrentUser();
@@ -158,6 +164,71 @@ function startPage() {
         document.querySelector("#empty-message").hidden = total !== 0;
     }
 
+    // From main: every expense listed under its category, newest first.
+    function showGroupedExpenses() {
+        const container = document.querySelector("#category-groups");
+        container.replaceChildren();
+
+        if (expenses.length === 0) {
+            const message = document.createElement("p");
+            message.className = "text-body-secondary";
+            message.textContent = "Add an expense on the expense form page to see it here.";
+            container.appendChild(message);
+            return;
+        }
+
+        const groups = {};
+        expenses.forEach(expense => {
+            if (!groups[expense.category]) {
+                groups[expense.category] = [];
+            }
+            groups[expense.category].push(expense);
+        });
+
+        Object.keys(groups).sort().forEach(category => {
+            const sorted = groups[category].slice().sort((a, b) => {
+                return b.date.localeCompare(a.date);
+            });
+
+            const card = document.createElement("div");
+            card.className = "category-group card mb-3";
+
+            const header = document.createElement("div");
+            header.className = "card-header fw-semibold";
+            header.textContent = capitalize(category);
+
+            const list = document.createElement("ul");
+            list.className = "list-group list-group-flush";
+
+            sorted.forEach(expense => {
+                const item = document.createElement("li");
+                item.className = "list-group-item d-flex justify-content-between align-items-center gap-3";
+
+                const details = document.createElement("div");
+
+                const description = document.createElement("div");
+                description.textContent = expense.description;
+
+                const time = document.createElement("time");
+                time.className = "small text-body-secondary";
+                time.dateTime = expense.date;
+                time.textContent = dateFormat.format(new Date(`${expense.date}T12:00:00`));
+
+                details.append(description, time);
+
+                const amount = document.createElement("span");
+                amount.className = "fw-bold text-nowrap";
+                amount.textContent = currency.format(expense.amount);
+
+                item.append(details, amount);
+                list.appendChild(item);
+            });
+
+            card.append(header, list);
+            container.appendChild(card);
+        });
+    }
+
     document.querySelector("#logout-button").addEventListener("click", function() {
         logOut();
         window.location.href = "../";
@@ -181,6 +252,7 @@ function startPage() {
 
     showPeriodTotals();
     showCategories("all");
+    showGroupedExpenses();
 }
 
 startPage();

@@ -100,6 +100,18 @@ header h1 {
     background-color: #198754;
 }
 
+/* From main: grouped expense cards */
+.category-group {
+    border: 1px solid #e5e7eb;
+    border-left: 4px solid #198754;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.category-group .list-group-item {
+    overflow-wrap: anywhere;
+}
+
 @media (max-width: 575px) {
     .category-row {
         grid-template-columns: 1fr auto;
