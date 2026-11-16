@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spending Summary</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="../node_modules/jquery/dist/jquery.min.js" defer></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="index.js" type="module"></script>
+</head>
+<body>
+    <main class="container pb-5">
+        <h1 class="my-4">Spending Summary</h1>
+
+        <section class="row g-3 mb-4" aria-label="Overview">
+            <div class="col-12 col-md-6">
+                <div id="total-card" class="summary-card card card-body">
+                    <span class="text-body-secondary">Total spent</span>
+                    <span id="total-spent" class="display-6 fw-bold">$0.00</span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="summary-card card card-body">
+                    <span class="text-body-secondary">Expenses logged</span>
+                    <span id="expense-count" class="display-6 fw-bold">0</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5" aria-labelledby="by-category-heading">
+            <h2 id="by-category-heading" class="h4 mb-3">Spending by category</h2>
+            <div id="category-totals" class="card card-body">
+                <!-- One row per category: name, share bar, total -->
+            </div>
+        </section>
+
+        <section aria-labelledby="grouped-heading">
+            <h2 id="grouped-heading" class="h4 mb-3">Expenses by category</h2>
+            <div id="category-groups">
+                <!-- One group per category, filled in by index.js -->
+            </div>
+        </section>
+    </main>
+</body>
+</html>

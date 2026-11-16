@@ -1,0 +1,40 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f2f5;
+  margin: 0;
+  padding: 0;
+}
+
+.summary-card {
+  border: 1px solid #e5e7eb;
+  border-left: 4px solid #0d6efd; 
+  border-radius: 12px;
+  background-color: #fff;
+}
+
+#total-spent {
+  color: #198754;
+  font-variant-numeric: tabular-nums;
+}
+
+#category-totals {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.category-row + .category-row {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.category-row .progress-bar { background-color: #198754; }
+
+.category-group {
+  border: 1px solid #e5e7eb;
+  border-left: 4px solid #198754;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.category-group .list-group-item { overflow-wrap: anywhere; }

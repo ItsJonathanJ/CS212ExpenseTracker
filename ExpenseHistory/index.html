@@ -11,11 +11,23 @@
     <script src="index.js" type="module"></script>
 </head>
 <body>
-    <div class="container">
+    <main class="container pb-5">
         <h1 class="my-4">Expense History</h1>
-        <div id="expense-history-list" class="list-group">
-            <!-- Expense history items will be dynamically added here -->
-        </div>
-    </div>
+
+        <section class="mb-5" aria-labelledby="current-heading">
+            <h2 id="current-heading" class="h4 mb-3">Logged expenses</h2>
+            <div id="expense-history-list" class="list-group">
+                <!-- Expense cards are added dynamically -->
+            </div>
+        </section>
+
+        <section aria-labelledby="activity-heading">
+            <h2 id="activity-heading" class="h4 mb-3">Activity log</h2>
+            <p class="text-body-secondary small">Every expense that was created, edited or deleted, newest first.</p>
+            <ul id="activity-log" class="list-group">
+                <!-- Activity entries are added dynamically -->
+            </ul>
+        </section>
+    </main>
 </body>
 </html>
